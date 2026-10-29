@@ -167,3 +167,11 @@
 html[data-scrolling] [data-anim="project"] {
   pointer-events: none;
 }
+
+/* Touch devices scroll natively (no ScrollSmoother), so in-page links glide
+   with CSS instead. */
+@media (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

@@ -3,7 +3,6 @@ import VariableProximity from "@/components/VariableProximity";
 import { site } from "@/lib/site";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 
 const serifAccent = "font-serif font-normal italic";
@@ -96,7 +95,7 @@ export default function ContentPart() {
             data-hero="6"
             className="z-20 flex flex-wrap items-center gap-3 max-lg:absolute max-lg:justify-center max-lg:inset-x-6 max-lg:bottom-[12svh] md:max-lg:inset-x-12"
           >
-            <Link
+            <a
               href="#contact"
               data-magnetic
               className="group inline-flex h-12 items-center gap-3 rounded-full bg-ink pl-6 pr-1.5 font-medium text-paper transition-colors duration-300 hover:bg-black md:h-14 md:pl-7 md:text-lg"
@@ -105,14 +104,14 @@ export default function ContentPart() {
               <span className="grid size-9 place-content-center rounded-full bg-brand transition-transform duration-500 group-hover:rotate-45 md:size-11">
                 <ArrowUpRight className="size-5" />
               </span>
-            </Link>
-            <Link
+            </a>
+            <a
               href="#works"
               data-magnetic
               className="inline-flex h-12 items-center rounded-full border border-ink bg-paper/70 px-6 font-medium backdrop-blur-sm transition-colors duration-300 hover:bg-ink hover:text-paper md:h-14 md:px-7 md:text-lg"
             >
               See my work
-            </Link>
+            </a>
           </div>
         </div>
 

@@ -75,12 +75,12 @@ export default function BottomFooter() {
       <div className="flex flex-col gap-3 border-t border-paper/15 pt-5 text-xs font-medium uppercase tracking-[0.2em] text-paper/60 sm:flex-row sm:items-center sm:justify-between md:text-sm">
         <span>© 2026 {site.name}</span>
         <DubaiTime />
-        <Link
+        <a
           href="#home"
           className="cursor-pointer transition-colors duration-300 hover:text-sun"
         >
           Back to top ↑
-        </Link>
+        </a>
       </div>
     </div>
   );

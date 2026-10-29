@@ -257,6 +257,9 @@ function smoothScroll(ScrollSmoother: typeof Smoother) {
   });
 
   // In-page links ("#works") glide through the smoother instead of jumping.
+  // In-page links must be plain <a> tags, not Next.js <Link>: <Link> also
+  // scrolls natively, and two scrollers at once leave the page out of sync,
+  // stuck on the wrong section.
   const onClick = (event: MouseEvent) => {
     const link = (event.target as HTMLElement).closest<HTMLAnchorElement>(
       'a[href^="#"]',
