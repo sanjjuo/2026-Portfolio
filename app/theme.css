@@ -1,0 +1,29 @@
+/*
+ * Brand design tokens, the single place to change the site's look.
+ *
+ * Tailwind turns each token into utilities, e.g. --color-brand gives
+ * bg-brand, text-brand, border-brand, ring-brand/40 and so on.
+ * "static" also writes every token as a CSS variable on :root, so code
+ * outside Tailwind can read it with var(--color-brand).
+ */
+@theme static {
+  /* Surfaces */
+  --color-paper: #f7f1ed; /* page background */
+  --color-ink: #1a1a1a; /* text and dark buttons */
+  --color-ink-soft: #242424; /* dark sections */
+  --color-dot: #3a3446; /* dot grid pattern */
+
+  /* Accents */
+  --color-brand: #ff5a1f; /* orange: links, highlights, hover states */
+  --color-sun: #ffe862; /* yellow: menu, About, highlights */
+
+  /* Text on paper */
+  --color-ink-muted: #6b6560; /* secondary text (shadcn already owns "muted") */
+  --color-line: rgb(26 26 26 / 0.14); /* dividers */
+
+  /* Typography */
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}

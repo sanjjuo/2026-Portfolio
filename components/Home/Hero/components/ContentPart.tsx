@@ -1,24 +1,69 @@
 "use client";
 import VariableProximity from "@/components/VariableProximity";
-import { ArrowUpRight } from "lucide-react";
+import { site } from "@/lib/site";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-// Lines below the name fade up one after another on load (skipped with reduced motion).
-const enter =
-  "animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-backwards motion-reduce:animate-none";
+const serifAccent = "font-serif font-normal italic";
 
-const serifAccent = "italic text-[#1a1a1a] [font-family:var(--font-fraunces)]";
+const proximity = {
+  fromFontVariationSettings: "'wght' 400, 'opsz' 9",
+  toFontVariationSettings: "'wght' 1000, 'opsz' 40",
+  radius: 140,
+  falloff: "linear" as const,
+  smoothing: 0.2,
+  scale: 1,
+  lift: 0,
+  idleWave: false,
+};
 
+// Phones and tablets stack the hero top to bottom: details, name, statement,
+// then the figure filling the rest. From lg up it layers: the giant name at
+// the back, the figure in front of it, details on top. data-hero sets the
+// order of the CSS intro (app/globals.css).
 export default function ContentPart() {
-  const containerRef = React.useRef<HTMLHeadingElement>(null);
+  const nameRef = React.useRef<HTMLHeadingElement>(null);
+
   return (
-    <div className="container flex w-full flex-col items-center justify-center select-none h-screen">
-      <div className="flex w-full flex-col items-center gap-4 md:gap-6">
-        <h1 id="hero-title" ref={containerRef} className="relative text-center">
+    <div className="container relative flex h-full flex-col pt-6 md:pt-10 lg:pb-[9vh]">
+      <div
+        data-hero="1"
+        className="relative z-20 grid grid-cols-2 items-center gap-4 font-mono text-[10px] uppercase tracking-[0.12em] whitespace-nowrap text-ink-muted sm:text-[11px] sm:tracking-[0.2em] md:text-xs lg:grid-cols-3"
+      >
+        <span>{site.role}</span>
+        <span className="hidden text-center lg:block">
+          Currently @ EUNX Investments
+        </span>
+        <span className="flex items-center justify-end gap-2 text-ink">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex size-2 rounded-full bg-green-500" />
+          </span>
+          Available for work
+        </span>
+      </div>
+
+      {/* The name, over two staggered lines. Behind the figure from lg up. */}
+      <h1
+        id="hero-title"
+        ref={nameRef}
+        aria-label={site.name}
+        className="relative z-0 mt-[6svh] select-none text-[16vw] leading-[0.82] lg:absolute lg:inset-x-12 lg:top-[16%] lg:mt-0 lg:text-[14vw]"
+      >
+        <span data-hero="2" className="block text-left">
+          <VariableProximity
+            label="MOHAMED"
+            className="variable-proximity-demo"
+            containerRef={nameRef}
+            {...proximity}
+          />
+        </span>
+        <span data-hero="3" className="relative block text-right">
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -right-3 -top-9 z-10 aspect-650/313 w-24 -rotate-8 bg-[#ff5a1f] animate-[sign_1.4s_cubic-bezier(0.6,0,0.2,1)_0.4s_both] motion-reduce:animate-none sm:-top-11 sm:w-32 md:-right-8 md:-top-14 md:w-40 lg:-right-12 lg:-top-16 lg:w-48"
+            className="pointer-events-none absolute -top-[0.42em] right-[1%] z-10 aspect-650/313 w-[1.5em] -rotate-8 bg-brand animate-[sign_1.4s_cubic-bezier(0.6,0,0.2,1)_calc(var(--intro-delay)+1.2s)_both] motion-reduce:animate-none"
             style={{
               maskImage: "url(/sanjeed.svg)",
               maskSize: "contain",
@@ -26,64 +71,114 @@ export default function ContentPart() {
             }}
           />
           <VariableProximity
-            label={"MOHAMED SANJEED"}
-            className="variable-proximity-demo leading-[1.05]"
-            fromFontVariationSettings="'wght' 400, 'opsz' 9"
-            toFontVariationSettings="'wght' 1000, 'opsz' 40"
-            containerRef={containerRef}
-            radius={100}
-            falloff="linear"
-            smoothing={0.2}
-            scale={1}
-            lift={0}
-            idleWave={false}
-            fontSize="min(14vw, 13svh, 150px)"
+            label="SANJEED"
+            className="variable-proximity-demo"
+            containerRef={nameRef}
+            {...proximity}
           />
-        </h1>
+        </span>
+      </h1>
 
-        <p
-          className={`${enter} delay-150 flex w-full items-center justify-center gap-4 font-mono text-[11px] uppercase tracking-[0.25em] text-neutral-700 sm:gap-6 sm:text-sm md:text-base`}
+      {/* Statement and actions: right under the name on phones (buttons float
+          at the bottom), at the bottom-left from lg up. */}
+      <div className="z-20 mt-5 flex items-end justify-between gap-8 sm:mt-7 lg:mt-auto">
+        <div className="max-w-xl space-y-6 lg:max-w-md">
+          <p
+            data-hero="5"
+            className="text-xl font-medium leading-[1.15] tracking-tight sm:text-2xl lg:text-3xl"
+          >
+            I build <em className={serifAccent}>fast</em>,{" "}
+            <em className={serifAccent}>modern</em> websites &amp; web apps that
+            help businesses <span className="text-brand">grow online.</span>
+          </p>
+
+          <div
+            data-hero="6"
+            className="z-20 flex flex-wrap items-center gap-3 max-lg:absolute max-lg:inset-x-6 max-lg:bottom-[12svh] md:max-lg:inset-x-12"
+          >
+            <Link
+              href="#contact"
+              data-magnetic
+              className="group inline-flex h-12 items-center gap-3 rounded-full bg-ink pl-6 pr-1.5 font-medium text-paper transition-colors duration-300 hover:bg-black md:h-14 md:pl-7 md:text-lg"
+            >
+              Let&apos;s talk
+              <span className="grid size-9 place-content-center rounded-full bg-brand transition-transform duration-500 group-hover:rotate-45 md:size-11">
+                <ArrowUpRight className="size-5" />
+              </span>
+            </Link>
+            <Link
+              href="#works"
+              data-magnetic
+              className="inline-flex h-12 items-center rounded-full border border-ink bg-paper/70 px-6 font-medium backdrop-blur-sm transition-colors duration-300 hover:bg-ink hover:text-paper md:h-14 md:px-7 md:text-lg"
+            >
+              See my work
+            </Link>
+          </div>
+        </div>
+
+        {/* Spinning "scroll" badge. */}
+        <a
+          data-hero="6"
+          href="#about"
+          aria-label="Scroll to explore"
+          className="group relative hidden size-36 shrink-0 place-content-center lg:grid xl:size-44"
         >
-          <span
+          <svg
+            viewBox="0 0 100 100"
             aria-hidden="true"
-            className="h-px max-w-40 flex-1 bg-neutral-400 max-sm:hidden"
-          />
-          <span className="whitespace-nowrap">
-            Frontend Developer <span className="text-[#ff5a1f]">·</span> Dubai,
-            UAE
+            className="absolute inset-0 size-full animate-[spin_16s_linear_infinite] motion-reduce:animate-none"
+          >
+            <defs>
+              <path
+                id="hero-badge-circle"
+                d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"
+              />
+            </defs>
+            <text className="fill-ink text-[8px] font-medium uppercase">
+              <textPath
+                href="#hero-badge-circle"
+                textLength="250"
+                lengthAdjust="spacing"
+              >
+                Scroll to explore ✦ Scroll to explore ✦
+              </textPath>
+            </text>
+          </svg>
+          <span
+            data-magnetic="0.5"
+            className="grid size-14 place-content-center rounded-full bg-ink text-paper transition-colors duration-300 group-hover:bg-brand lg:size-16"
+          >
+            <ArrowDown className="size-5 transition-transform duration-300 group-hover:translate-y-0.5" />
           </span>
-          <span
-            aria-hidden="true"
-            className="h-px max-w-40 flex-1 bg-neutral-400 max-sm:hidden"
-          />
-        </p>
+        </a>
+      </div>
 
-        <p
-          className={`${enter} delay-300 max-w-2xl text-center text-lg leading-snug text-neutral-600 sm:text-xl md:text-2xl`}
-        >
-          I build <em className={serifAccent}>fast</em>,{" "}
-          <em className={serifAccent}>modern</em> websites and web apps that
-          help startups and businesses grow online.
-        </p>
-
+      {/* The figure: a head-to-thigh crop fading out at the bottom, above the
+          hero's stepped edge (z-10). On phones it fills the space left under
+          the statement; from lg up it stands on the bottom edge beside it.
+          Shown close to its natural size so it stays sharp. On large
+          screens it drifts slower than the page while scrolling. */}
+      <div
+        data-anim="parallax"
+        data-speed="12"
+        data-parallax-from="1024"
+        className="pointer-events-none relative z-15 mt-1 flex min-h-0 flex-1 justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:mt-0 lg:flex-none lg:justify-end lg:pr-[3%] xl:justify-center xl:pr-0 xl:pl-[20%]"
+      >
         <div
-          className={`${enter} delay-500 mt-2 flex flex-wrap items-center justify-center gap-3 select-auto`}
+          data-hero="4"
+          className="relative aspect-[0.88] h-full max-w-full overflow-hidden mask-[linear-gradient(to_bottom,black_62%,transparent_97%)] lg:h-[76svh] xl:h-[84svh]"
         >
-          <Link
-            href="#contact"
-            className="group inline-flex h-12 items-center gap-3 rounded-full bg-[#1a1a1a] pl-6 pr-1.5 font-medium text-white transition-colors duration-300 hover:bg-black md:h-14 md:pl-7 md:text-lg"
-          >
-            Let&apos;s talk
-            <span className="grid size-9 place-content-center rounded-full bg-[#ff5a1f] transition-transform duration-500 group-hover:rotate-45 md:size-11">
-              <ArrowUpRight className="size-5" />
-            </span>
-          </Link>
-          <Link
-            href="#works"
-            className="inline-flex h-12 items-center rounded-full border border-[#1a1a1a] px-6 font-medium transition-colors duration-300 hover:bg-[#1a1a1a] hover:text-white md:h-14 md:px-7 md:text-lg"
-          >
-            See my work
-          </Link>
+          <Image
+            src="/aboutme.png"
+            alt="Illustration of Mohamed Sanjeed"
+            width={608}
+            height={1088}
+            loading="eager"
+            fetchPriority="high"
+            quality={90}
+            sizes="(min-width: 1024px) 74vh, 60vh"
+            className="absolute -top-[5%] left-1/2 lg:top-[2%] h-[158%] w-auto max-w-none -translate-x-1/2"
+          />
         </div>
       </div>
     </div>

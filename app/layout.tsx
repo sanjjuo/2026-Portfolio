@@ -25,10 +25,33 @@ const appFont3 = Fraunces({
   subsets: ["latin"],
 });
 
+const description =
+  "Mohamed Sanjeed is a frontend developer in Dubai, UAE, building fast, responsive and animated web apps with React, Next.js, TypeScript and GSAP.";
+
 export const metadata: Metadata = {
   title: "Mohamed Sanjeed — Frontend Developer",
-  description:
-    "Portfolio of Mohamed Sanjeed, a frontend developer based in Dubai, UAE.",
+  description,
+  keywords: [
+    "Mohamed Sanjeed",
+    "Frontend Developer",
+    "React Developer",
+    "Next.js Developer",
+    "Dubai",
+    "UAE",
+    "Portfolio",
+  ],
+  authors: [{ name: "Mohamed Sanjeed" }],
+  openGraph: {
+    title: "Mohamed Sanjeed — Frontend Developer",
+    description,
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mohamed Sanjeed — Frontend Developer",
+    description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

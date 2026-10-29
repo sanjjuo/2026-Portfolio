@@ -1,17 +1,19 @@
 import DotGrid from "@/components/DotGrid";
+import LazyMount from "@/components/common/LazyMount/LazyMount";
 
 interface Props {
   width: string;
   height: string;
-  baseColor: string;
-  activeColor: string;
+  baseColor?: string;
+  activeColor?: string;
+  // Any CSS color, e.g. a theme token: "var(--color-sun)".
   backgroundColor: string;
   intro?: boolean;
 }
 export default function DotGridBackground({
   intro = true,
-  baseColor,
-  activeColor,
+  baseColor = "var(--color-dot)",
+  activeColor = "var(--color-dot)",
   backgroundColor,
   height,
   width,
@@ -26,28 +28,31 @@ export default function DotGridBackground({
         backgroundColor: backgroundColor,
       }}
     >
-      <DotGrid
-        baseColor={baseColor}
-        activeColor={activeColor}
-        shape="circle"
-        dotSize={2}
-        gap={20}
-        proximity={140}
-        strength={1}
-        bounce={0.6}
-        tension={0.05}
-        returnDuration={0.8}
-        shockRadius={320}
-        shockStrength={5}
-        swell={0.8}
-        stretch={0.5}
-        glow={0.5}
-        fade={0}
-        intro={intro}
-        opacity={1}
-        mouseInteraction
-        clickShock
-      />
+      {/* The background color shows at once; the WebGL dots start near the viewport. */}
+      <LazyMount className="absolute inset-0">
+        <DotGrid
+          baseColor={baseColor}
+          activeColor={activeColor}
+          shape="circle"
+          dotSize={2}
+          gap={20}
+          proximity={140}
+          strength={1}
+          bounce={0.6}
+          tension={0.05}
+          returnDuration={0.8}
+          shockRadius={320}
+          shockStrength={5}
+          swell={0.8}
+          stretch={0.5}
+          glow={0.5}
+          fade={0}
+          intro={intro}
+          opacity={1}
+          mouseInteraction
+          clickShock
+        />
+      </LazyMount>
     </div>
   );
 }

@@ -128,8 +128,23 @@ interface Shock {
   start: number;
 }
 
+// Accepts theme tokens like "var(--color-sun)" by reading them from :root.
+// Cached because toRgb runs every frame.
+const resolvedColors = new Map<string, string>();
+const resolveColor = (color: string) => {
+  const token = /^var\((--[\w-]+)\)$/.exec(String(color).trim());
+  if (!token) return color;
+  if (!resolvedColors.has(color)) {
+    resolvedColors.set(
+      color,
+      getComputedStyle(document.documentElement).getPropertyValue(token[1]).trim(),
+    );
+  }
+  return resolvedColors.get(color)!;
+};
+
 const toRgb = (color: string): [number, number, number] => {
-  const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(color).trim());
+  const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(resolveColor(color).trim());
   if (!match) return [1, 1, 1];
   const hex = match[1].length === 3 ? match[1].replace(/./g, digit => digit + digit) : match[1];
   return [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255) as [number, number, number];

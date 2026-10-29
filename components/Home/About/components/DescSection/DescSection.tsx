@@ -10,9 +10,7 @@ export default function DescSection() {
       <DotGridBackground
         height="100%"
         width="100%"
-        activeColor="#3a3446"
-        baseColor="#3a3446"
-        backgroundColor="#242424"
+        backgroundColor="var(--color-ink-soft)"
         intro={false}
       />
       <div className="container absolute inset-0 z-20 place-content-center">
@@ -23,7 +21,7 @@ export default function DescSection() {
           stagger={0.5}
           duration={3}
           smoothing={0}
-          baseOpacity={0.1}
+          baseOpacity={0.4}
           baseRotation={0}
           baseOffset={0}
           enableBlur={false}
@@ -31,7 +29,7 @@ export default function DescSection() {
           textClassName="text-white text-3xl! sm:text-5xl! md:text-6xl! lg:text-7xl! xl:text-8xl! font-semibold leading-tight text-start lg:text-center"
         >
           <span className="text-5xl! md:text-7xl! xl:text-9xl! font-black">
-            2+ years
+            2.5+ years
           </span>{" "}
           <br className="lg:hidden" />
           of turning ideas into clean, responsive web experiences.

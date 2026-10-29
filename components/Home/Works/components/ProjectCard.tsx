@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
 import type { Project } from "../projectsData";
+import ProjectMedia from "./ProjectMedia";
 
-const darkCovers = ["#242424", "#ff5a1f"];
+const darkCovers = ["#0F1B2D", "#ff5a1f"];
 
 export default function ProjectCard({
   project,
@@ -11,67 +11,73 @@ export default function ProjectCard({
   project: Project;
   index: number;
 }) {
-  const { title, description, tags, year, href, image, cover } = project;
+  const { title, description, tags, category, href, images = [], cover } =
+    project;
   const number = String(index + 1).padStart(2, "0");
-  const isDark = darkCovers.includes(cover);
+  const isExternal = href.startsWith("http");
+  const host = isExternal ? new URL(href).hostname.replace(/^www\./, "") : "";
 
   return (
-    <article className="group relative flex flex-col gap-5">
-      <div
-        className="relative aspect-4/3 overflow-hidden rounded-3xl"
-        style={{ backgroundColor: cover }}
-      >
-        {image ? (
-          <Image
-            src={image}
-            alt=""
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          />
-        ) : (
-          <span
-            aria-hidden="true"
-            className={`absolute inset-0 grid place-content-center px-6 text-center text-4xl font-bold uppercase tracking-tight transition-transform duration-700 ease-out group-hover:scale-105 sm:text-5xl lg:text-6xl ${
-              isDark ? "text-white" : "text-[#1a1a1a]"
-            }`}
-          >
-            {title}
-          </span>
-        )}
-
+    <article className="group relative">
+      <div className="relative mb-5 flex items-center justify-between gap-4 pt-4 text-xs font-medium uppercase tracking-[0.2em] text-ink-muted md:mb-8 md:text-sm">
         <span
           aria-hidden="true"
-          className="absolute right-4 top-4 grid size-12 place-content-center rounded-full bg-white text-black transition-all duration-500 group-hover:rotate-45 group-hover:bg-[#ff5a1f] group-hover:text-white md:size-14"
-        >
-          <ArrowUpRight className="size-5 md:size-6" />
-        </span>
+          data-anim="line"
+          className="absolute inset-x-0 top-0 h-px bg-line"
+        />
+        <span data-anim="fade-up">({number})</span>
+        <span data-anim="fade-up">{category}</span>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <div className="flex items-baseline justify-between gap-4 text-sm font-medium uppercase tracking-[0.2em] text-neutral-500">
-          <span>{number}</span>
-          <span>{year}</span>
-        </div>
+      <ProjectMedia
+        images={images}
+        title={title}
+        href={href}
+        cover={cover}
+        isDark={darkCovers.includes(cover)}
+      />
 
-        <h3 className="text-2xl font-bold md:text-3xl">
-          <a href={href} className="after:absolute after:inset-0">
+      <div className="mt-6 grid gap-5 md:mt-10 md:grid-cols-12 md:gap-10">
+        <h3
+          data-anim="fade-up"
+          className="text-3xl font-bold leading-[1.05] tracking-tight sm:text-4xl md:col-span-7 lg:text-6xl">
+          <a
+            href={href}
+            className="after:absolute after:inset-0"
+            {...(isExternal && {
+              target: "_blank",
+              rel: "noopener noreferrer",
+            })}
+          >
             {title}
           </a>
         </h3>
 
-        <p className="text-base text-neutral-600 md:text-lg">{description}</p>
+        <div
+          data-anim="stagger"
+          className="flex flex-col gap-5 md:col-span-5 md:pt-2"
+        >
+          <p className="text-base text-ink-muted md:text-lg">{description}</p>
 
-        <ul aria-label="Technologies" className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <li
-              key={tag}
-              className="rounded-full border border-neutral-300 px-3 py-1 text-xs font-medium uppercase tracking-wider md:text-sm"
-            >
-              {tag}
-            </li>
-          ))}
-        </ul>
+          <ul
+            aria-label="Technologies"
+            className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium uppercase tracking-[0.15em] text-ink-muted md:text-sm"
+          >
+            {tags.map((tag, i) => (
+              <li key={tag} className="flex items-center gap-3">
+                {tag}
+                {i < tags.length - 1 && <span aria-hidden="true">/</span>}
+              </li>
+            ))}
+          </ul>
+
+          {host && (
+            <span className="inline-flex items-center gap-1.5 self-start border-b border-current pb-0.5 text-sm font-semibold uppercase tracking-[0.15em] transition-colors duration-300 group-hover:text-brand">
+              {host}
+              <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </span>
+          )}
+        </div>
       </div>
     </article>
   );
