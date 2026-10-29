@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 // A screenshot in a minimal browser window, never scaled so its text stays
 // sharp. "cropped" shows only the top 16:9 part, so cards of different
@@ -98,18 +98,59 @@ export default function ProjectMedia({
     ? new URL(href).hostname.replace(/^www\./, "")
     : "";
 
-  // Moves the badge with a GPU transform, at most once per frame, so it never
-  // triggers layout.
+  // The badge follows the cursor with a GPU transform (never layout). While
+  // the cursor is over the panel, a frame loop eases the badge toward it and
+  // re-measures the panel, so it stays under the cursor even while the page
+  // scrolls. On enter it snaps to the cursor, so it never grows in from a
+  // corner. The cursor is tracked on window, because hover is switched off
+  // on panels during scrolling (data-scrolling, lib/animations.ts).
+  const pointer = useRef({ x: 0, y: 0 });
+  const badge = useRef({ x: 0, y: 0 });
   const frame = useRef(0);
-  const moveBadge = (event: React.PointerEvent) => {
-    const { clientX, clientY } = event;
+
+  // Stable across renders, so stop() always removes the listener it added.
+  const trackPointer = useCallback((event: PointerEvent) => {
+    pointer.current = { x: event.clientX, y: event.clientY };
+  }, []);
+  const stop = () => {
     cancelAnimationFrame(frame.current);
-    frame.current = requestAnimationFrame(() => {
-      const rect = ref.current?.getBoundingClientRect();
-      if (!rect || !badgeRef.current) return;
-      badgeRef.current.style.transform = `translate3d(${clientX - rect.left}px, ${clientY - rect.top}px, 0)`;
-    });
+    frame.current = 0;
+    window.removeEventListener("pointermove", trackPointer);
   };
+  const follow = (snap = false) => {
+    const rect = ref.current?.getBoundingClientRect();
+    const { x, y } = pointer.current;
+    if (
+      !rect ||
+      !badgeRef.current ||
+      x < rect.left ||
+      x > rect.right ||
+      y < rect.top ||
+      y > rect.bottom
+    ) {
+      stop();
+      return;
+    }
+    const b = badge.current;
+    b.x = snap ? x - rect.left : b.x + (x - rect.left - b.x) * 0.25;
+    b.y = snap ? y - rect.top : b.y + (y - rect.top - b.y) * 0.25;
+    badgeRef.current.style.transform = `translate3d(${b.x}px, ${b.y}px, 0)`;
+    frame.current = requestAnimationFrame(() => follow());
+  };
+  const onEnter = (event: React.PointerEvent) => {
+    if (event.pointerType !== "mouse") return;
+    pointer.current = { x: event.clientX, y: event.clientY };
+    stop();
+    window.addEventListener("pointermove", trackPointer, { passive: true });
+    follow(true);
+  };
+  useEffect(
+    () => () => {
+      cancelAnimationFrame(frame.current);
+      window.removeEventListener("pointermove", trackPointer);
+    },
+    [trackPointer],
+  );
 
   // Left and right card positions. GSAP animates the inner [data-anim-item],
   // so these transforms on the wrapper stay untouched.
@@ -127,8 +168,8 @@ export default function ProjectMedia({
       tabIndex={-1}
       aria-hidden="true"
       data-anim="project"
-      onPointerMove={moveBadge}
-      className="group/media relative z-10 block aspect-4/3 overflow-hidden rounded-2xl sm:aspect-16/10 md:cursor-none md:rounded-[28px]"
+      onPointerEnter={onEnter}
+      className="group/media relative z-10 block aspect-4/3 overflow-hidden rounded-2xl sm:aspect-16/10 md:rounded-[28px] [@media(hover:hover)]:cursor-none"
       style={{ backgroundColor: cover }}
     >
       {/* Soft light from the top so flat covers get some depth. */}
@@ -184,7 +225,7 @@ export default function ProjectMedia({
 
       <span
         ref={badgeRef}
-        className="pointer-events-none absolute top-0 left-0 z-10 hidden size-28 -translate-x-1/2 -translate-y-1/2 scale-0 will-change-transform place-content-center rounded-full bg-brand text-center text-xs font-semibold uppercase leading-snug tracking-[0.15em] text-white shadow-lg transition-[scale] duration-500 ease-out-expo group-hover/media:scale-100 md:grid lg:size-32"
+        className="pointer-events-none absolute top-0 left-0 z-10 hidden size-28 -translate-x-1/2 -translate-y-1/2 scale-0 will-change-transform place-content-center rounded-full bg-brand text-center text-xs font-semibold uppercase leading-snug tracking-[0.15em] text-white shadow-lg transition-[scale] duration-500 ease-out-expo group-hover/media:scale-100 lg:size-32 [@media(hover:hover)]:grid"
       >
         View
         <br />

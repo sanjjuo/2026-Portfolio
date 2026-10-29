@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Englebert, Fraunces } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -10,12 +10,6 @@ const appFont = Geist({
 
 const monoFont = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const appFont2 = Englebert({
-  variable: "--font-englebert",
-  weight: ["400"],
   subsets: ["latin"],
 });
 
@@ -63,7 +57,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "antialiased",
         appFont.variable,
         monoFont.variable,
-        appFont2.variable,
         appFont3.variable,
         "font-sans",
       )}
