@@ -71,11 +71,19 @@ export default function ProjectCard({
             ))}
           </ul>
 
+          {/* A real link (z-10 keeps it above the title's card-wide click
+              area), so it works even while the text block is animated. */}
           {host && (
-            <span className="inline-flex items-center gap-1.5 self-start border-b border-current pb-0.5 text-sm font-semibold uppercase tracking-[0.15em] transition-colors duration-300 group-hover:text-brand">
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${title} live site (${host})`}
+              className="relative z-10 inline-flex items-center gap-1.5 self-start border-b border-current pb-0.5 text-sm font-semibold uppercase tracking-[0.15em] transition-colors duration-300 hover:text-brand group-hover:text-brand"
+            >
               {host}
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </span>
+            </a>
           )}
         </div>
       </div>
