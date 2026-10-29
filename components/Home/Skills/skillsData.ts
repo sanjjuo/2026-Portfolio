@@ -85,7 +85,11 @@ export const skillGroups: SkillGroup[] = [
     title: "Testing & Analytics",
     skills: [
       { name: "Playwright", icon: GiDramaMasks, color: "#2EAD33" },
-      { name: "Google Tag Manager", icon: SiGoogletagmanager, color: "#246FDB" },
+      {
+        name: "Google Tag Manager",
+        icon: SiGoogletagmanager,
+        color: "#246FDB",
+      },
       { name: "Google Analytics", icon: SiGoogleanalytics, color: "#E37400" },
     ],
   },
@@ -100,6 +104,8 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: "Familiar With",
-    skills: [{ name: "React Native", icon: TbBrandReactNative, color: "#61DAFB" }],
+    skills: [
+      { name: "React Native", icon: TbBrandReactNative, color: "#61DAFB" },
+    ],
   },
 ];

@@ -1,6 +1,7 @@
-import SectionHeading, { Accent } from "@/components/common/SectionHeading/SectionHeading";
-import LazyMount from "@/components/common/LazyMount/LazyMount";
-import SkillsLoop from "./components/SkillsLoop";
+import SectionHeading, {
+  Accent,
+} from "@/components/common/SectionHeading/SectionHeading";
+import LazySkillsLoop from "./components/LazySkillsLoop";
 import { skillGroups } from "./skillsData";
 
 export default function Skills() {
@@ -28,9 +29,7 @@ export default function Skills() {
 
         {/* Full width so the logos run edge to edge. */}
         <div data-anim="fade-up" className="mt-16 md:mt-24">
-          <LazyMount className="min-h-26 md:min-h-30">
-            <SkillsLoop />
-          </LazyMount>
+          <LazySkillsLoop />
         </div>
 
         <div
@@ -38,7 +37,10 @@ export default function Skills() {
           className="container mt-16 grid gap-x-8 gap-y-10 sm:grid-cols-2 md:mt-24 lg:grid-cols-3"
         >
           {skillGroups.map(({ title, skills }) => (
-            <div key={title} className="space-y-4 border-t border-paper/15 pt-5">
+            <div
+              key={title}
+              className="space-y-4 border-t border-paper/15 pt-5"
+            >
               <h3 className="text-sm font-medium uppercase tracking-[0.2em] text-paper/60">
                 {title}
               </h3>

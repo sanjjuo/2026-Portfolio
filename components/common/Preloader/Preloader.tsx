@@ -17,7 +17,7 @@ export default function Preloader() {
         <span>{site.location}</span>
       </div>
 
-      <p className="flex justify-center overflow-hidden font-serif text-[9vw] leading-none tracking-tight md:text-[6vw]">
+      <p className="flex justify-center overflow-hidden font-serif text-[8vw] leading-none tracking-tight md:text-[6vw]">
         {letters.map((letter, i) => (
           <span
             key={i}

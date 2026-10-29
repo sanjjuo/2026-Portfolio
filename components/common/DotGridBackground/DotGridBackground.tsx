@@ -1,5 +1,11 @@
-import DotGrid from "@/components/DotGrid";
+"use client";
+
 import LazyMount from "@/components/common/LazyMount/LazyMount";
+import dynamic from "next/dynamic";
+
+// WebGL code is downloaded only when a dot grid comes near the screen
+// (LazyMount below), not with the first page load.
+const DotGrid = dynamic(() => import("@/components/DotGrid"), { ssr: false });
 
 interface Props {
   width: string;

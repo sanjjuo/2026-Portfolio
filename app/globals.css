@@ -37,17 +37,11 @@
   --intro-delay: 0s;
 }
 
-/* The preloader only runs on large screens; phones and tablets get the hero
-   straight away (a loader there hurts mobile Speed Index). Kept short. */
-@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+/* Preloader length. Kept short: a long intro lowers Lighthouse's Speed
+   Index, especially on mobile. */
+@media (prefers-reduced-motion: no-preference) {
   :root {
     --intro-delay: 1.2s;
-  }
-}
-
-@media (max-width: 1023px) {
-  .preloader {
-    display: none;
   }
 }
 

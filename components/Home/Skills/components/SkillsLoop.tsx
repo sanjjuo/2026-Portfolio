@@ -6,7 +6,9 @@ import { skillGroups, type Skill } from "../skillsData";
 const toLogos = (skills: Skill[]): LogoItem[] =>
   // Skip repeated icons, so Redux, Redux Toolkit and RTK Query show one "Redux" logo.
   skills
-    .filter((skill, i, all) => all.findIndex((s) => s.icon === skill.icon) === i)
+    .filter(
+      (skill, i, all) => all.findIndex((s) => s.icon === skill.icon) === i,
+    )
     .map(({ name, icon: Icon, color }) => ({
       node: <Icon />,
       title: name,

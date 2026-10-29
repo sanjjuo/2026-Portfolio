@@ -1,4 +1,5 @@
-import { gsap, ScrollSmoother, ScrollTrigger, SplitText } from "./gsap";
+import type { ScrollSmoother as Smoother } from "gsap/ScrollSmoother";
+import { gsap, ScrollTrigger, SplitText } from "./gsap";
 
 /*
  * All site animations live here. Components only mark elements with data
@@ -241,7 +242,7 @@ function steps() {
 
 // Smooth, eased page scrolling. Touch devices keep native scrolling, which
 // feels best there. Returns a cleanup.
-function smoothScroll() {
+function smoothScroll(ScrollSmoother: typeof Smoother) {
   const wrapper = document.querySelector<HTMLElement>("#smooth-wrapper");
   const content = document.querySelector<HTMLElement>("#smooth-content");
   if (!wrapper || !content) return () => {};
@@ -356,11 +357,11 @@ export function initAnimations() {
   const mm = gsap.matchMedia();
 
   mm.add("(prefers-reduced-motion: no-preference)", (context) => {
-    // Create the smoother first, so every ScrollTrigger uses it. Touch
-    // devices scroll natively, so phones skip it (less work on load).
-    const stopSmoothing = window.matchMedia("(pointer: fine)").matches
-      ? smoothScroll()
-      : () => {};
+    // Touch devices scroll natively, so ScrollSmoother is only downloaded
+    // for mouse/trackpad users. It must exist before the ScrollTriggers, so
+    // the setups below wait for it there.
+    let stopSmoothing = () => {};
+    let cancelled = false;
 
     // Set the rest up one group per task, yielding in between, so loading
     // never blocks the page for long (better Total Blocking Time).
@@ -379,6 +380,7 @@ export function initAnimations() {
     let next = 0;
     let timer = 0;
     const runNext = () => {
+      if (cancelled) return;
       if (next < setups.length) {
         context.add(setups[next++]);
         timer = window.setTimeout(runNext, 0);
@@ -386,9 +388,20 @@ export function initAnimations() {
         ScrollTrigger.refresh();
       }
     };
-    runNext();
+
+    if (window.matchMedia("(pointer: fine)").matches) {
+      import("gsap/ScrollSmoother").then(({ ScrollSmoother }) => {
+        if (cancelled) return;
+        gsap.registerPlugin(ScrollSmoother);
+        stopSmoothing = smoothScroll(ScrollSmoother);
+        runNext();
+      });
+    } else {
+      runNext();
+    }
 
     return () => {
+      cancelled = true;
       clearTimeout(timer);
       stopSmoothing();
     };

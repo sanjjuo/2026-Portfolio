@@ -94,7 +94,7 @@ export default function ContentPart() {
 
           <div
             data-hero="6"
-            className="z-20 flex flex-wrap items-center gap-3 max-lg:absolute max-lg:inset-x-6 max-lg:bottom-[12svh] md:max-lg:inset-x-12"
+            className="z-20 flex flex-wrap items-center gap-3 max-lg:absolute max-lg:justify-center max-lg:inset-x-6 max-lg:bottom-[12svh] md:max-lg:inset-x-12"
           >
             <Link
               href="#contact"
