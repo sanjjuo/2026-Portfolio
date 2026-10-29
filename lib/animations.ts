@@ -274,6 +274,30 @@ function smoothScroll() {
   };
 }
 
+// Marks <html data-scrolling> while the page scrolls, so CSS can switch off
+// hover effects that would otherwise start mid-scroll (see globals.css).
+// Returns a cleanup.
+function scrollingFlag() {
+  const root = document.documentElement;
+  let timer = 0;
+  const onScroll = () => {
+    if (!timer) root.setAttribute("data-scrolling", "");
+    clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      root.removeAttribute("data-scrolling");
+      timer = 0;
+    }, 150);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("wheel", onScroll, { passive: true });
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("wheel", onScroll);
+    clearTimeout(timer);
+    root.removeAttribute("data-scrolling");
+  };
+}
+
 // Returns a cleanup that removes the pointer listeners.
 function magnetic() {
   const cleanups = all("[data-magnetic]").map((el) => {
@@ -371,9 +395,14 @@ export function initAnimations() {
   });
 
   // Magnetic pull only makes sense with a mouse.
-  mm.add("(prefers-reduced-motion: no-preference) and (hover: hover)", () =>
-    magnetic(),
-  );
+  mm.add("(prefers-reduced-motion: no-preference) and (hover: hover)", () => {
+    const stopMagnetic = magnetic();
+    const stopFlag = scrollingFlag();
+    return () => {
+      stopMagnetic();
+      stopFlag();
+    };
+  });
 
   // Images and fonts change the page height after load.
   const refresh = () => ScrollTrigger.refresh();

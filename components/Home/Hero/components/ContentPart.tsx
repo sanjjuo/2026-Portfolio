@@ -50,7 +50,7 @@ export default function ContentPart() {
         id="hero-title"
         ref={nameRef}
         aria-label={site.name}
-        className="relative z-0 mt-[6svh] select-none text-[16vw] leading-[0.82] lg:absolute lg:inset-x-12 lg:top-[16%] lg:mt-0 lg:text-[14vw]"
+        className="relative z-12 mt-[6svh] select-none text-[16vw] leading-[0.82] lg:absolute lg:inset-x-12 lg:top-[16%] lg:mt-0 lg:text-[14vw]"
       >
         <span data-hero="2" className="block text-left">
           <VariableProximity

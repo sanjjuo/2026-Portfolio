@@ -149,14 +149,27 @@
   --intro-delay: 0s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* The preloader only runs on large screens; phones and tablets get the hero
+   straight away (a loader there hurts mobile Speed Index). Kept short. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
   :root {
-    --intro-delay: 2s;
+    --intro-delay: 1.2s;
   }
+}
+
+@media (max-width: 1023px) {
+  .preloader {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
   [data-hero] {
     animation: hero-in 1.2s var(--ease-out-expo) both;
     /* Starts as the preloader lifts (--intro-delay). */
-    animation-delay: calc(var(--intro-delay) + 0.1s + var(--hero-order, 0) * 0.12s);
+    animation-delay: calc(
+      var(--intro-delay) + 0.1s + var(--hero-order, 0) * 0.12s
+    );
   }
   [data-hero="2"] {
     --hero-order: 1;
@@ -215,25 +228,24 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .preloader {
-    animation: preloader-exit 0.9s cubic-bezier(0.76, 0, 0.24, 1)
+    animation: preloader-exit 0.8s cubic-bezier(0.76, 0, 0.24, 1)
       var(--intro-delay) forwards;
   }
   .preloader-letter {
-    animation: preloader-letter 0.9s var(--ease-out-expo) both;
+    animation: preloader-letter 0.7s var(--ease-out-expo) both;
   }
   .preloader-fade {
-    animation: preloader-fade 0.6s ease 0.1s both;
+    animation: preloader-fade 0.4s ease both;
   }
   .preloader-count {
-    animation: preloader-count 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s
-      forwards;
+    animation: preloader-count 1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards;
     counter-reset: preloader var(--preloader-n);
   }
   .preloader-count::after {
     content: counter(preloader);
   }
   .preloader-bar {
-    animation: preloader-bar 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s both;
+    animation: preloader-bar 1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
   }
 }
 
@@ -266,4 +278,10 @@
   from {
     scale: 0 1;
   }
+}
+
+/* No hover effects start on project panels while the page scrolls
+   (data-scrolling is set in lib/animations.ts). */
+html[data-scrolling] [data-anim="project"] {
+  pointer-events: none;
 }

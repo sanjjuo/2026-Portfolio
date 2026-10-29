@@ -70,9 +70,9 @@ export default function ImageSection() {
             data-anim="split"
             className="text-3xl font-medium leading-[1.1] tracking-tight sm:text-4xl md:col-span-8 lg:text-6xl"
           >
-            I&apos;m Sanjeed, a frontend developer in Dubai turning ideas into{" "}
-            <Accent>fast</Accent>, <Accent>accessible</Accent> and good-looking
-            web experiences.
+            I&apos;m Mohamed Sanjeed, a frontend developer in Dubai turning
+            ideas into <Accent>fast</Accent>, <Accent>accessible</Accent> and
+            good-looking web experiences.
           </p>
 
           <div className="space-y-8 md:col-span-4 md:pt-3">

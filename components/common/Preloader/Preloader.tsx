@@ -22,7 +22,7 @@ export default function Preloader() {
           <span
             key={i}
             className="preloader-letter inline-block whitespace-pre"
-            style={{ animationDelay: `${0.15 + i * 0.04}s` }}
+            style={{ animationDelay: `${0.05 + i * 0.025}s` }}
           >
             {letter}
           </span>

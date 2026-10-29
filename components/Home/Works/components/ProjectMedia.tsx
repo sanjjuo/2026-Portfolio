@@ -94,13 +94,21 @@ export default function ProjectMedia({
   const ref = useRef<HTMLAnchorElement>(null);
   const badgeRef = useRef<HTMLSpanElement>(null);
   const [mainImage, ...moreImages] = images;
-  const host = href.startsWith("http") ? new URL(href).hostname.replace(/^www\./, "") : "";
+  const host = href.startsWith("http")
+    ? new URL(href).hostname.replace(/^www\./, "")
+    : "";
 
+  // Moves the badge with a GPU transform, at most once per frame, so it never
+  // triggers layout.
+  const frame = useRef(0);
   const moveBadge = (event: React.PointerEvent) => {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect || !badgeRef.current) return;
-    badgeRef.current.style.left = `${event.clientX - rect.left}px`;
-    badgeRef.current.style.top = `${event.clientY - rect.top}px`;
+    const { clientX, clientY } = event;
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() => {
+      const rect = ref.current?.getBoundingClientRect();
+      if (!rect || !badgeRef.current) return;
+      badgeRef.current.style.transform = `translate3d(${clientX - rect.left}px, ${clientY - rect.top}px, 0)`;
+    });
   };
 
   // Left and right card positions. GSAP animates the inner [data-anim-item],
@@ -134,7 +142,7 @@ export default function ProjectMedia({
           {moreImages.slice(0, 2).map((image, i) => (
             <div
               key={image.src}
-              className={`absolute w-[62%] transition-[translate,rotate] duration-1000 ease-out-expo ${fan[i]}`}
+              className={`absolute w-[62%] transition-[translate,rotate] duration-1000 ease-out-expo will-change-transform ${fan[i]}`}
             >
               <div data-anim-item className="opacity-90">
                 <BrowserFrame
@@ -149,7 +157,7 @@ export default function ProjectMedia({
             </div>
           ))}
 
-          <div className="relative mt-[10%] w-[78%]">
+          <div className="relative mt-[10%] w-[78%] will-change-transform">
             <div data-anim-item>
               <BrowserFrame
                 image={mainImage}
@@ -176,7 +184,7 @@ export default function ProjectMedia({
 
       <span
         ref={badgeRef}
-        className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden size-28 -translate-x-1/2 -translate-y-1/2 scale-0 place-content-center rounded-full bg-brand text-center text-xs font-semibold uppercase leading-snug tracking-[0.15em] text-white shadow-lg transition-[scale] duration-500 ease-out-expo group-hover/media:scale-100 md:grid lg:size-32"
+        className="pointer-events-none absolute top-0 left-0 z-10 hidden size-28 -translate-x-1/2 -translate-y-1/2 scale-0 will-change-transform place-content-center rounded-full bg-brand text-center text-xs font-semibold uppercase leading-snug tracking-[0.15em] text-white shadow-lg transition-[scale] duration-500 ease-out-expo group-hover/media:scale-100 md:grid lg:size-32"
       >
         View
         <br />
