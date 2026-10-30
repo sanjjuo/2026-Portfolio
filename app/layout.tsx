@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Fraunces,
+  Geist,
+  Geist_Mono,
+} from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const appFont = Geist({
+const sansFont = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
 });
@@ -13,9 +18,17 @@ const monoFont = Geist_Mono({
   subsets: ["latin"],
 });
 
-const appFont3 = Fraunces({
+const serifFont = Fraunces({
   variable: "--font-fraunces",
   axes: ["opsz"],
+  subsets: ["latin"],
+});
+
+// Display face for the hero name: a condensed, heavy grotesque that eases
+// thinner as the cursor comes close (VariableProximity).
+const displayFont = Bricolage_Grotesque({
+  variable: "--font-display",
+  axes: ["opsz", "wdth"],
   subsets: ["latin"],
 });
 
@@ -55,9 +68,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn(
         "h-full",
         "antialiased",
-        appFont.variable,
+        sansFont.variable,
         monoFont.variable,
-        appFont3.variable,
+        serifFont.variable,
+        displayFont.variable,
         "font-sans",
       )}
     >

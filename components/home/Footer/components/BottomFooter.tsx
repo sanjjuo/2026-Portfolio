@@ -1,4 +1,4 @@
-import DubaiTime from "@/components/Home/About/components/ImageSection/DubaiTime";
+import DubaiTime from "@/components/common/DubaiTime/DubaiTime";
 import { site } from "@/lib/site";
 import Link from "next/link";
 import { CiInstagram, CiLinkedin } from "react-icons/ci";
@@ -47,7 +47,7 @@ export default function BottomFooter() {
           </p>
           <Link
             href={`mailto:${site.email}`}
-            className="block bg-[linear-gradient(currentColor,currentColor)] bg-size-[0%_2px] bg-left-bottom bg-no-repeat pb-1 text-xl font-semibold transition-[background-size,color] duration-500 ease-out-expo hover:bg-size-[100%_2px] hover:text-sun sm:text-2xl md:text-3xl"
+            className="block bg-[linear-gradient(currentColor,currentColor)] bg-size-[0%_2px] bg-bottom-left bg-no-repeat pb-1 text-xl font-semibold transition-[background-size,color] duration-500 ease-out-expo hover:bg-size-[100%_2px] hover:text-sun sm:text-2xl md:text-3xl"
           >
             {site.email}
           </Link>

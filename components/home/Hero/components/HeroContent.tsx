@@ -1,5 +1,5 @@
 "use client";
-import VariableProximity from "@/components/VariableProximity";
+import VariableProximity from "@/components/effects/VariableProximity";
 import { site } from "@/lib/site";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -8,8 +8,8 @@ import React from "react";
 const serifAccent = "font-serif font-normal italic";
 
 const proximity = {
-  fromFontVariationSettings: "'wght' 400, 'opsz' 9",
-  toFontVariationSettings: "'wght' 1000, 'opsz' 40",
+  fromFontVariationSettings: "'wght' 800, 'wdth' 75, 'opsz' 96",
+  toFontVariationSettings: "'wght' 250, 'wdth' 75, 'opsz' 96",
   radius: 140,
   falloff: "linear" as const,
   smoothing: 0.2,
@@ -18,18 +18,20 @@ const proximity = {
   idleWave: false,
 };
 
-// Phones and tablets stack the hero top to bottom: details, name, statement,
-// then the figure filling the rest. From lg up it layers: the giant name at
-// the back, the figure in front of it, details on top. data-hero sets the
-// order of the CSS intro (app/globals.css).
-export default function ContentPart() {
+// A layered poster on every screen: the giant name at the back, the figure
+// standing in front of it on the bottom edge, and the statement and actions
+// on top. Phones and tablets center it all, with the statement over the
+// faded lower part of the figure; from lg up the statement sits at the
+// bottom-left beside it. data-hero sets the order of the CSS intro
+// (app/globals.css).
+export default function HeroContent() {
   const nameRef = React.useRef<HTMLHeadingElement>(null);
 
   return (
     <div className="container relative flex h-full flex-col pt-6 md:pt-10 lg:pb-[9vh]">
       <div
         data-hero="1"
-        className="relative z-20 grid grid-cols-2 items-center gap-4 font-mono text-[10px] uppercase tracking-[0.12em] whitespace-nowrap text-ink-muted sm:text-[11px] sm:tracking-[0.2em] md:text-xs lg:grid-cols-3"
+        className="relative z-20 grid grid-cols-2 items-center gap-4 font-mono text-[9px] uppercase tracking-[0.06em] min-[360px]:text-[10px] min-[360px]:tracking-[0.12em] whitespace-nowrap text-ink-muted sm:text-[11px] sm:tracking-[0.2em] md:text-xs lg:grid-cols-3"
       >
         <span>{site.role}</span>
         <span className="hidden text-center lg:block">
@@ -49,12 +51,11 @@ export default function ContentPart() {
         id="hero-title"
         ref={nameRef}
         aria-label={site.name}
-        className="relative z-12 mt-[6svh] select-none text-[16vw] leading-[0.82] lg:absolute lg:inset-x-12 lg:top-[16%] lg:mt-0 lg:text-[14vw]"
+        className="relative z-12 mt-[4svh] select-none text-[min(23vw,30svh)] leading-[0.84] uppercase md:mt-[3svh] lg:absolute lg:inset-x-12 lg:top-[16%] lg:mt-0 lg:text-[16vw]"
       >
         <span data-hero="2" className="block text-left">
           <VariableProximity
             label="MOHAMED"
-            className="variable-proximity-demo"
             containerRef={nameRef}
             {...proximity}
           />
@@ -62,29 +63,35 @@ export default function ContentPart() {
         <span data-hero="3" className="relative block text-right">
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -top-[0.42em] right-[1%] z-10 aspect-650/313 w-[1.5em] -rotate-8 bg-brand animate-[sign_1.4s_cubic-bezier(0.6,0,0.2,1)_calc(var(--intro-delay)+1.2s)_both] motion-reduce:animate-none"
+            className="pointer-events-none absolute top-[-0.42em] right-[1%] z-10 aspect-650/313 w-[1.5em] -rotate-8 bg-brand animate-[sign_1.4s_cubic-bezier(0.6,0,0.2,1)_calc(var(--intro-delay)+1.2s)_both] motion-reduce:animate-none"
             style={{
-              maskImage: "url(/sanjeed.svg)",
+              maskImage: "url(/images/signature.svg)",
               maskSize: "contain",
               maskRepeat: "no-repeat",
             }}
           />
           <VariableProximity
             label="SANJEED"
-            className="variable-proximity-demo"
             containerRef={nameRef}
             {...proximity}
           />
         </span>
       </h1>
 
-      {/* Statement and actions: right under the name on phones (buttons float
-          at the bottom), at the bottom-left from lg up. */}
-      <div className="z-20 mt-5 flex items-end justify-between gap-8 sm:mt-7 lg:mt-auto">
-        <div className="max-w-xl space-y-6 lg:max-w-md">
+      {/* Paper fade behind the statement on phones and tablets, so it reads
+          clearly over the figure. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-16 h-[50%] bg-linear-to-t from-paper from-40% via-paper/80 to-transparent lg:hidden"
+      />
+
+      {/* Statement and actions: centered at the bottom over the figure on
+          phones and tablets, at the bottom-left beside it from lg up. */}
+      <div className="relative z-20 mt-auto flex items-end justify-center gap-8 pb-[max(13svh,6.5rem)] md:pb-[17svh] lg:justify-between lg:pb-0">
+        <div className="max-w-md space-y-4 max-lg:text-center min-[360px]:space-y-5 sm:space-y-6 md:max-w-lg lg:max-w-md">
           <p
             data-hero="5"
-            className="text-xl font-medium leading-[1.15] tracking-tight sm:text-2xl lg:text-3xl"
+            className="text-lg font-medium leading-[1.15] tracking-tight min-[360px]:text-xl sm:text-2xl lg:text-3xl"
           >
             I build <em className={serifAccent}>fast</em>,{" "}
             <em className={serifAccent}>modern</em> websites &amp; web apps that
@@ -93,22 +100,22 @@ export default function ContentPart() {
 
           <div
             data-hero="6"
-            className="z-20 flex flex-wrap items-center gap-3 max-lg:absolute max-lg:justify-center max-lg:inset-x-6 max-lg:bottom-[12svh] md:max-lg:inset-x-12"
+            className="flex items-center gap-2 max-lg:justify-center min-[360px]:gap-3"
           >
             <a
               href="#contact"
               data-magnetic
-              className="group inline-flex h-12 items-center gap-3 rounded-full bg-ink pl-6 pr-1.5 font-medium text-paper transition-colors duration-300 hover:bg-black md:h-14 md:pl-7 md:text-lg"
+              className="group inline-flex h-11 shrink-0 items-center gap-2.5 rounded-full bg-ink pl-4 pr-1.5 text-[15px] font-medium min-[360px]:h-12 min-[360px]:gap-3 min-[360px]:pl-6 min-[360px]:text-base text-paper transition-colors duration-300 hover:bg-black md:h-14 md:pl-7 md:text-lg"
             >
               Let&apos;s talk
-              <span className="grid size-9 place-content-center rounded-full bg-brand transition-transform duration-500 group-hover:rotate-45 md:size-11">
+              <span className="grid size-8 place-content-center rounded-full bg-brand min-[360px]:size-9 transition-transform duration-500 group-hover:rotate-45 md:size-11">
                 <ArrowUpRight className="size-5" />
               </span>
             </a>
             <a
               href="#works"
               data-magnetic
-              className="inline-flex h-12 items-center rounded-full border border-ink bg-paper/70 px-6 font-medium backdrop-blur-sm transition-colors duration-300 hover:bg-ink hover:text-paper md:h-14 md:px-7 md:text-lg"
+              className="inline-flex h-11 shrink-0 items-center rounded-full border border-ink bg-paper/70 px-4 text-[15px] font-medium min-[360px]:h-12 min-[360px]:px-6 min-[360px]:text-base backdrop-blur-sm transition-colors duration-300 hover:bg-ink hover:text-paper md:h-14 md:px-7 md:text-lg"
             >
               See my work
             </a>
@@ -152,23 +159,23 @@ export default function ContentPart() {
         </a>
       </div>
 
-      {/* The figure: a head-to-thigh crop fading out at the bottom, above the
-          hero's stepped edge (z-10). On phones it fills the space left under
-          the statement; from lg up it stands on the bottom edge beside it.
-          Shown close to its natural size so it stays sharp. On large
-          screens it drifts slower than the page while scrolling. */}
+      {/* The figure: a head-to-thigh crop fading out at the bottom, standing
+          on the bottom edge in front of the name and above the hero's stepped
+          edge (z-10). Centered on phones and tablets, beside the statement
+          from lg up. Shown close to its natural size so it stays sharp. On
+          large screens it drifts slower than the page while scrolling. */}
       <div
         data-anim="parallax"
         data-speed="12"
         data-parallax-from="1024"
-        className="pointer-events-none relative z-15 mt-1 flex min-h-0 flex-1 justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:mt-0 lg:flex-none lg:justify-end lg:pr-[3%] xl:justify-center xl:pr-0 xl:pl-[20%]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-15 flex justify-center lg:justify-end lg:pr-[3%] xl:justify-center xl:pr-0 xl:pl-[20%]"
       >
         <div
           data-hero="4"
-          className="relative aspect-[0.88] h-full max-w-full overflow-hidden mask-[linear-gradient(to_bottom,black_62%,transparent_97%)] lg:h-[76svh] xl:h-[84svh]"
+          className="relative h-[83svh] w-full max-w-md overflow-hidden mask-[linear-gradient(to_bottom,black_62%,transparent_97%)] md:h-[70svh] md:max-w-xl lg:aspect-[0.88] lg:h-[76svh] lg:w-auto lg:max-w-none xl:h-[84svh]"
         >
           <Image
-            src="/aboutme.png"
+            src="/images/avatar.png"
             alt="Illustration of Mohamed Sanjeed"
             width={608}
             height={1088}
@@ -176,7 +183,7 @@ export default function ContentPart() {
             fetchPriority="high"
             quality={90}
             sizes="(min-width: 1024px) 74vh, 60vh"
-            className="absolute -top-[5%] left-1/2 lg:top-[2%] h-[158%] w-auto max-w-none -translate-x-1/2"
+            className="absolute top-[-5%] left-1/2 lg:top-[2%] h-[158%] w-auto max-w-none -translate-x-1/2"
           />
         </div>
       </div>

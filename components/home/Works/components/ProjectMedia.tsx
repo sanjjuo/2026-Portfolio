@@ -155,8 +155,8 @@ export default function ProjectMedia({
   // Left and right card positions. GSAP animates the inner [data-anim-item],
   // so these transforms on the wrapper stay untouched.
   const fan = [
-    "-translate-x-[24%] -translate-y-[20%] -rotate-6 group-hover/media:-translate-x-[32%] group-hover/media:-rotate-9",
-    "translate-x-[24%] -translate-y-[20%] rotate-6 group-hover/media:translate-x-[32%] group-hover/media:rotate-9",
+    "translate-x-[-24%] translate-y-[-20%] -rotate-6 group-hover/media:translate-x-[-32%] group-hover/media:-rotate-9",
+    "translate-x-[24%] translate-y-[-20%] rotate-6 group-hover/media:translate-x-[32%] group-hover/media:rotate-9",
   ];
 
   return (

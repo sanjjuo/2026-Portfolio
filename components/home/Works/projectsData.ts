@@ -1,10 +1,10 @@
 import type { StaticImageData } from "next/image";
-import eunxBusinessAccounts from "@/public/projects/eunx/business-accounts.png";
-import eunxHero from "@/public/projects/eunx/hero.png";
-import eunxTradingSteps from "@/public/projects/eunx/trading-steps.png";
-import urbaanCategoryFilters from "@/public/projects/urbaan/category-filters.png";
-import urbaanHome from "@/public/projects/urbaan/home.png";
-import urbaanLatestProducts from "@/public/projects/urbaan/latest-products.png";
+import eunxBusinessAccounts from "@/public/images/projects/eunx/business-accounts.png";
+import eunxHero from "@/public/images/projects/eunx/hero.png";
+import eunxTradingSteps from "@/public/images/projects/eunx/trading-steps.png";
+import urbaanCategoryFilters from "@/public/images/projects/urbaan/category-filters.png";
+import urbaanHome from "@/public/images/projects/urbaan/home.png";
+import urbaanLatestProducts from "@/public/images/projects/urbaan/latest-products.png";
 
 export interface Project {
   title: string;

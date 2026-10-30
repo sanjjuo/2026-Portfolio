@@ -1,5 +1,5 @@
-import Home from "@/components/Home/Home";
-import { Footer } from "@/components/Home/index";
+import Home from "@/components/home/Home";
+import { Footer } from "@/components/home/index";
 import Menu from "@/components/common/Menu/Menu";
 import GsapAnimations from "@/components/common/GsapAnimations/GsapAnimations";
 

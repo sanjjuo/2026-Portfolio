@@ -5,7 +5,7 @@ import { ArrowUpRight, Clock, Download } from "lucide-react";
 import Link from "next/link";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import DubaiTime from "./DubaiTime";
+import DubaiTime from "@/components/common/DubaiTime/DubaiTime";
 
 // Set to false when you are not taking new work.
 const isAvailable = true;
@@ -30,7 +30,7 @@ const stats = [
 const pill =
   "inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-ink px-4 text-xs font-medium text-paper sm:h-12 sm:px-5 sm:text-sm";
 
-export default function ImageSection() {
+export default function AboutIntro() {
   return (
     <div className="relative overflow-hidden">
       <div className="absolute inset-0">

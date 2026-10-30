@@ -1,10 +1,10 @@
-import ContentPart from "./components/ContentPart";
+import HeroContent from "./components/HeroContent";
 import GridPattern from "./components/GridPattern";
 
 export default function Hero() {
   return (
     <section id="home" aria-labelledby="hero-title" className="relative">
-      <div className="relative h-svh min-h-160 overflow-hidden bg-paper">
+      <div className="relative h-svh min-h-140 overflow-hidden bg-paper md:min-h-160">
         {/* Glow and grid sit above the stepped edge below (z-10), which
             reaches into the hero, so they continue over it instead of
             stopping in a flat band. The grid fades out toward the bottom to
@@ -15,10 +15,10 @@ export default function Hero() {
         >
           {/* Soft sun glow. A gradient, not a blur filter, so it costs
               nothing while scrolling. */}
-          <div className="absolute -right-[20%] -top-[45%] size-[80vmax] rounded-full bg-radial from-sun/55 via-sun/15 to-transparent to-60%" />
+          <div className="absolute right-[-20%] top-[-45%] size-[80vmax] rounded-full bg-radial from-sun/55 via-sun/15 to-transparent to-60%" />
           <GridPattern />
         </div>
-        <ContentPart />
+        <HeroContent />
       </div>
       {/* Stepped edge into the About section. The steps shrink away in a wave
           as the hero scrolls out (data-anim="steps", lib/animations.ts). */}

@@ -1,6 +1,6 @@
 "use client";
 
-import LogoLoop, { type LogoItem } from "@/components/LogoLoop";
+import LogoLoop, { type LogoItem } from "@/components/effects/LogoLoop";
 import { skillGroups, type Skill } from "../skillsData";
 
 const toLogos = (skills: Skill[]): LogoItem[] =>

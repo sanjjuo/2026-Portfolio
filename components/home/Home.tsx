@@ -5,7 +5,7 @@ import {
   Works,
   Skills,
   Marquee,
-} from "@/components/Home/index";
+} from "@/components/home/index";
 
 export default function Home() {
   return (

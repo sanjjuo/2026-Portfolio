@@ -1,10 +1,10 @@
 "use client";
 import DotGridBackground from "@/components/common/DotGridBackground/DotGridBackground";
-import ScrollReveal from "@/components/ScrollReveal";
+import ScrollReveal from "@/components/effects/ScrollReveal";
 import Image from "next/image";
-import ThreeDViewer from "../ThreeDViewer/ThreeDViewer";
+import FloatingModel from "../FloatingModel/FloatingModel";
 
-export default function DescSection() {
+export default function AboutStatement() {
   return (
     <div className="relative h-150 md:h-200">
       <DotGridBackground
@@ -34,24 +34,24 @@ export default function DescSection() {
           <br className="lg:hidden" />
           of turning ideas into clean, responsive web experiences.
         </ScrollReveal>
-        <ThreeDViewer
-          image="/frontend.glb"
+        <FloatingModel
+          image="/models/frontend.glb"
           startAngle={-35}
           className="absolute left-2 top-0 z-30 md:left-6 md:top-8 xl:left-20 xl:top-10"
         />
-        <ThreeDViewer
-          image="/github.glb"
+        <FloatingModel
+          image="/models/github.glb"
           startAngle={30}
           className="absolute right-2 top-28 z-30 md:right-6 md:top-8 xl:right-20 xl:top-10"
         />
-        <ThreeDViewer
-          image="/claude.glb"
+        <FloatingModel
+          image="/models/claude.glb"
           startAngle={-10}
           className="absolute bottom-16 left-1/2 z-30 -translate-x-1/2 md:bottom-12 xl:bottom-0"
         />
       </div>
       <Image
-        src="/brush-image.webp"
+        src="/images/brush-stroke.webp"
         alt=""
         width={1000}
         height={800}

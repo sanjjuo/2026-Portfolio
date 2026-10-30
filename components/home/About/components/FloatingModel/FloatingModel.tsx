@@ -4,11 +4,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
 // Three.js is heavy, so it is only downloaded when a viewer is about to scroll into view.
-const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
+const ModelViewer = dynamic(() => import("@/components/effects/ModelViewer"), {
   ssr: false,
 });
 
-export default function ThreeDViewer({
+export default function FloatingModel({
   image,
   className,
   startAngle = -35,

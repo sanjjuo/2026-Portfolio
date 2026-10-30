@@ -1,0 +1,10 @@
+{
+  // Read .css files as Tailwind CSS, so @theme, @apply, @utility and
+  // @custom-variant are understood instead of flagged as unknown at-rules.
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  }
+}
