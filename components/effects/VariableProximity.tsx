@@ -13,7 +13,6 @@ import {
   type HTMLAttributes,
   type RefObject
 } from 'react';
-import './VariableProximity.css';
 
 type Falloff = 'linear' | 'exponential' | 'gaussian';
 

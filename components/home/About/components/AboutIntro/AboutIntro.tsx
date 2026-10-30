@@ -2,7 +2,6 @@ import DotGridBackground from "@/components/common/DotGridBackground/DotGridBack
 import { Accent } from "@/components/common/SectionHeading/SectionHeading";
 import { site } from "@/lib/site";
 import { ArrowUpRight, Clock, Download } from "lucide-react";
-import Link from "next/link";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import DubaiTime from "@/components/common/DubaiTime/DubaiTime";
@@ -53,7 +52,8 @@ export default function AboutIntro() {
             (01) <span className="ml-2">About me</span>
           </p>
           {hasCv && (
-            <Link
+            // A plain link: next/link would prefetch the PDF on page load.
+            <a
               href={`/${site.cvFile}`}
               download
               data-anim="fade-up"
@@ -61,7 +61,7 @@ export default function AboutIntro() {
             >
               Download CV
               <Download className="size-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
-            </Link>
+            </a>
           )}
         </div>
 

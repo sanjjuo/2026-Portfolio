@@ -10,12 +10,14 @@ import React, {
   type ReactNode,
   type RefObject
 } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { gsap } from 'gsap';
+import type { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import './ScrollReveal.css';
-
-gsap.registerPlugin(ScrollTrigger);
+const loadGsap = () =>
+  Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([{ gsap }, { ScrollTrigger }]) => {
+    gsap.registerPlugin(ScrollTrigger);
+    return { gsap, ScrollTrigger };
+  });
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -176,142 +178,151 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       offset: baseOffset,
       highlightColor
     };
-    const mm = gsap.matchMedia();
+    // GSAP is loaded on demand, so it stays out of the startup bundle.
+    let mm: ReturnType<typeof gsap.matchMedia> | undefined;
+    let cancelled = false;
+    loadGsap().then(({ gsap, ScrollTrigger }) => {
+      if (cancelled) return;
+      mm = gsap.matchMedia();
 
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const order = pieces.map((_, index) => index);
-      const last = pieces.map(() => -1);
-      const state = { p: 0 };
-      let count = pieces.length;
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const order = pieces.map((_, index) => index);
+        const last = pieces.map(() => -1);
+        const state = { p: 0 };
+        let count = pieces.length;
 
-      const measure = () => {
-        if (splitBy !== 'lines' || !wrappers.length) return;
-        let line = -1;
-        let top = -Infinity;
-        wrappers.forEach((wrapper, index) => {
-          const next = wrapper.offsetTop;
-          if (Math.abs(next - top) > 2) {
-            line += 1;
-            top = next;
-          }
-          order[index] = line;
-        });
-        count = line + 1;
-      };
-
-      const total = () => span + Math.max(0, count - 1) * gap;
-
-      const render = () => {
-        const at = state.p * total();
-        pieces.forEach((piece, index) => {
-          const t = clamp01((at - order[index] * gap) / span);
-          if (t === last[index]) return;
-          last[index] = t;
-          paintPiece(piece, t, look);
-        });
-      };
-
-      measure();
-      pieces.forEach(piece => {
-        piece.style.willChange =
-          pieces.length > 80 ? '' : effect === 'fade' && !baseOffset ? 'opacity' : 'opacity, transform';
-        piece.style.transformOrigin = effect === 'flip' ? '50% 100%' : '';
-      });
-      if (look.masked) {
-        wrappers.forEach(wrapper => {
-          wrapper.style.clipPath = RISE_MASK;
-        });
-      }
-      render();
-
-      if (mode === 'enter') {
-        let played = false;
-        const play = () => {
-          if (played) return;
-          played = true;
-          gsap.to(state, { p: 1, duration: total(), ease: 'none', onUpdate: render });
-          if (baseRotation) gsap.to(el, { rotate: 0, duration: Math.min(total(), 1.4), ease: 'power3.out' });
-        };
-        const startAt = () => {
-          const view = viewportHeight();
-          const top =
-            el.getBoundingClientRect().top -
-            (scroller instanceof HTMLElement
-              ? scroller.getBoundingClientRect().top + scroller.clientTop - scroller.scrollTop
-              : -window.scrollY);
-          const raw = top - view + 0.2 * Math.min(el.offsetHeight, view);
-          return Math.min(raw, ScrollTrigger.maxScroll(scroller) - 1);
-        };
-        if (baseRotation) gsap.set(el, { transformOrigin: '0% 50%', rotate: baseRotation });
-        ScrollTrigger.create({
-          trigger: el,
-          scroller,
-          start: startAt,
-          onEnter: play,
-          onLeave: play,
-          onRefresh: (self: ScrollTrigger) => {
-            if (self.progress > 0) play();
-          }
-        });
-      } else {
-        if (baseRotation) {
-          gsap.fromTo(
-            el,
-            { transformOrigin: '0% 50%', rotate: baseRotation },
-            {
-              ease: 'none',
-              rotate: 0,
-              scrollTrigger: {
-                trigger: el,
-                scroller,
-                start: 'top bottom',
-                end: clampToScroll(rotationEnd),
-                scrub
-              }
+        const measure = () => {
+          if (splitBy !== 'lines' || !wrappers.length) return;
+          let line = -1;
+          let top = -Infinity;
+          wrappers.forEach((wrapper, index) => {
+            const next = wrapper.offsetTop;
+            if (Math.abs(next - top) > 2) {
+              line += 1;
+              top = next;
             }
-          );
+            order[index] = line;
+          });
+          count = line + 1;
+        };
+
+        const total = () => span + Math.max(0, count - 1) * gap;
+
+        const render = () => {
+          const at = state.p * total();
+          pieces.forEach((piece, index) => {
+            const t = clamp01((at - order[index] * gap) / span);
+            if (t === last[index]) return;
+            last[index] = t;
+            paintPiece(piece, t, look);
+          });
+        };
+
+        measure();
+        pieces.forEach(piece => {
+          piece.style.willChange =
+            pieces.length > 80 ? '' : effect === 'fade' && !baseOffset ? 'opacity' : 'opacity, transform';
+          piece.style.transformOrigin = effect === 'flip' ? '50% 100%' : '';
+        });
+        if (look.masked) {
+          wrappers.forEach(wrapper => {
+            wrapper.style.clipPath = RISE_MASK;
+          });
         }
-        gsap.to(state, {
-          p: 1,
-          ease: 'none',
-          onUpdate: render,
-          scrollTrigger: {
+        render();
+
+        if (mode === 'enter') {
+          let played = false;
+          const play = () => {
+            if (played) return;
+            played = true;
+            gsap.to(state, { p: 1, duration: total(), ease: 'none', onUpdate: render });
+            if (baseRotation) gsap.to(el, { rotate: 0, duration: Math.min(total(), 1.4), ease: 'power3.out' });
+          };
+          const startAt = () => {
+            const view = viewportHeight();
+            const top =
+              el.getBoundingClientRect().top -
+              (scroller instanceof HTMLElement
+                ? scroller.getBoundingClientRect().top + scroller.clientTop - scroller.scrollTop
+                : -window.scrollY);
+            const raw = top - view + 0.2 * Math.min(el.offsetHeight, view);
+            return Math.min(raw, ScrollTrigger.maxScroll(scroller) - 1);
+          };
+          if (baseRotation) gsap.set(el, { transformOrigin: '0% 50%', rotate: baseRotation });
+          ScrollTrigger.create({
             trigger: el,
             scroller,
-            start: () => `top bottom-=${0.2 * Math.min(el.offsetHeight, viewportHeight())}`,
-            end: clampToScroll(wordAnimationEnd),
-            scrub
+            start: startAt,
+            onEnter: play,
+            onLeave: play,
+            onRefresh: (self: ScrollTrigger) => {
+              if (self.progress > 0) play();
+            }
+          });
+        } else {
+          if (baseRotation) {
+            gsap.fromTo(
+              el,
+              { transformOrigin: '0% 50%', rotate: baseRotation },
+              {
+                ease: 'none',
+                rotate: 0,
+                scrollTrigger: {
+                  trigger: el,
+                  scroller,
+                  start: 'top bottom',
+                  end: clampToScroll(rotationEnd),
+                  scrub
+                }
+              }
+            );
           }
-        });
-      }
+          gsap.to(state, {
+            p: 1,
+            ease: 'none',
+            onUpdate: render,
+            scrollTrigger: {
+              trigger: el,
+              scroller,
+              start: () => `top bottom-=${0.2 * Math.min(el.offsetHeight, viewportHeight())}`,
+              end: clampToScroll(wordAnimationEnd),
+              scrub
+            }
+          });
+        }
 
-      const resizeObserver =
-        splitBy === 'lines' && typeof ResizeObserver !== 'undefined'
-          ? new ResizeObserver(() => {
-              measure();
-              last.fill(-1);
-              render();
-            })
-          : null;
-      resizeObserver?.observe(textEl);
+        const resizeObserver =
+          splitBy === 'lines' && typeof ResizeObserver !== 'undefined'
+            ? new ResizeObserver(() => {
+                measure();
+                last.fill(-1);
+                render();
+              })
+            : null;
+        resizeObserver?.observe(textEl);
 
-      return () => {
-        resizeObserver?.disconnect();
-        pieces.forEach(piece => {
-          piece.style.opacity = '';
-          piece.style.transform = '';
-          piece.style.transformOrigin = '';
-          piece.style.filter = '';
-          piece.style.color = '';
-          piece.style.willChange = '';
-        });
-        wrappers.forEach(wrapper => {
-          wrapper.style.clipPath = '';
-        });
-      };
+        return () => {
+          resizeObserver?.disconnect();
+          pieces.forEach(piece => {
+            piece.style.opacity = '';
+            piece.style.transform = '';
+            piece.style.transformOrigin = '';
+            piece.style.filter = '';
+            piece.style.color = '';
+            piece.style.willChange = '';
+          });
+          wrappers.forEach(wrapper => {
+            wrapper.style.clipPath = '';
+          });
+        };
+      });
     });
 
-    return () => mm.revert();
+    return () => {
+      cancelled = true;
+      mm?.revert();
+    };
   }, [
     mounted,
     scrollContainerRef,

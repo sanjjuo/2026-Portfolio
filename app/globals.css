@@ -88,6 +88,13 @@
   }
 }
 
+/* Navigation pill: the new section name rolls up into place. */
+@keyframes nav-label {
+  from {
+    translate: 0 100%;
+  }
+}
+
 /* Hero signature "writing" itself on, left to right. */
 @keyframes sign {
   from {
@@ -174,4 +181,29 @@ html[data-scrolling] [data-anim="project"] {
   html {
     scroll-behavior: smooth;
   }
+}
+
+/*
+ * Styles for two effect components (components/effects). Kept here instead
+ * of in their own .css files, which Next.js would ship as an extra
+ * render-blocking stylesheet. (.sr-only comes from Tailwind.)
+ */
+.variable-proximity {
+  font-family: var(--font-display);
+}
+
+.scroll-reveal {
+  margin: 20px 0;
+}
+
+.scroll-reveal-text {
+  display: block;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.scroll-reveal-word,
+.scroll-reveal-piece {
+  display: inline-block;
 }

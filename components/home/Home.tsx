@@ -3,6 +3,7 @@ import {
   About,
   Experience,
   Works,
+  Testimonials,
   Skills,
   Marquee,
 } from "@/components/home/index";
@@ -14,6 +15,7 @@ export default function Home() {
       <About />
       <Experience />
       <Works />
+      <Testimonials />
       <Skills />
       <Marquee />
     </>

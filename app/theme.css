@@ -23,6 +23,8 @@
 
   /* Typography */
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  /* Hero name and preloader: condensed heavy capitals (app/layout.tsx) */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);

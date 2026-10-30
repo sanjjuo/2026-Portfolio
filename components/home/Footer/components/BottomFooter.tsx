@@ -4,30 +4,18 @@ import Link from "next/link";
 import { CiInstagram, CiLinkedin } from "react-icons/ci";
 import { PiGithubLogoLight, PiWhatsappLogoLight } from "react-icons/pi";
 
+const icons = {
+  LinkedIn: CiLinkedin,
+  GitHub: PiGithubLogoLight,
+  Instagram: CiInstagram,
+  WhatsApp: PiWhatsappLogoLight,
+};
+
 // External links (starting with "http") open in a new tab.
-const socialLinks = [
-  {
-    label: "LinkedIn",
-    icon: CiLinkedin,
-    href: "https://www.linkedin.com/in/mohamedsanjeed",
-  },
-  {
-    label: "GitHub",
-    icon: PiGithubLogoLight,
-    href: "https://github.com/sanjjuo",
-  },
-  {
-    label: "Instagram",
-    icon: CiInstagram,
-    href: "https://www.instagram.com/sanjjuo/",
-  },
-  // wa.me needs the number in international format without "+" or spaces.
-  {
-    label: "WhatsApp",
-    icon: PiWhatsappLogoLight,
-    href: "https://wa.me/971544772940",
-  },
-];
+const socialLinks = site.socials.map((social) => ({
+  ...social,
+  icon: icons[social.label as keyof typeof icons],
+}));
 
 export default function BottomFooter() {
   return (

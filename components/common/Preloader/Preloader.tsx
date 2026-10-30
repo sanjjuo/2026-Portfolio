@@ -17,7 +17,8 @@ export default function Preloader() {
         <span>{site.location}</span>
       </div>
 
-      <p className="flex justify-center overflow-hidden font-serif text-[8vw] leading-none tracking-tight md:text-[6vw]">
+      {/* Same face and weight as the hero name. */}
+      <p className="flex justify-center overflow-hidden font-display text-[11vw] leading-none font-extrabold md:text-[8vw]">
         {letters.map((letter, i) => (
           <span
             key={i}

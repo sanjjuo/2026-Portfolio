@@ -22,11 +22,12 @@ const walk = (dir) =>
   });
 ["app", "components", "lib"].forEach((dir) => walk(join(root, dir)));
 
-const escape = (s) => s.replace(/[.*+?^${}()|[\]\/]/g, "\$&");
+const escape = (s) => s.replace(/[.*+?^${}()|[\]\\/-]/g, "\\$&");
 let count = 0;
 
 for (const file of files) {
-  let src = readFileSync(file, "utf8");
+  const original = readFileSync(file, "utf8");
+  let src = original;
   const tokens = new Set(src.split(/[\s"'`{}(),;<>=]+/));
   for (const token of tokens) {
     // "!visible" in code is a negation, not an important modifier.
@@ -36,11 +37,11 @@ for (const file of files) {
     count++;
     console.log(`${relative(root, file)}: ${token} -> ${canonical}`);
     if (fix) {
-      const pattern = new RegExp(`(?<=[\s"'\`{(])${escape(token)}(?=[\s"'\`})])`, "g");
-      src = src.replace(pattern, canonical);
+      const pattern = new RegExp(`(?<=[\\s"'\`{(])${escape(token)}(?=[\\s"'\`})])`, "g");
+      src = src.replace(pattern, () => canonical);
     }
   }
-  if (fix) writeFileSync(file, src);
+  if (fix && src !== original) writeFileSync(file, src);
 }
 
 console.log(

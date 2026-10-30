@@ -8,8 +8,8 @@ import React from "react";
 const serifAccent = "font-serif font-normal italic";
 
 const proximity = {
-  fromFontVariationSettings: "'wght' 800, 'wdth' 75, 'opsz' 96",
-  toFontVariationSettings: "'wght' 250, 'wdth' 75, 'opsz' 96",
+  fromFontVariationSettings: "'wght' 800",
+  toFontVariationSettings: "'wght' 250",
   radius: 140,
   falloff: "linear" as const,
   smoothing: 0.2,

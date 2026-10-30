@@ -1,13 +1,13 @@
 import Home from "@/components/home/Home";
 import { Footer } from "@/components/home/index";
-import Menu from "@/components/common/Menu/Menu";
+import SectionNav from "@/components/common/SectionNav/SectionNav";
 import GsapAnimations from "@/components/common/GsapAnimations/GsapAnimations";
 
 export default function page() {
   return (
     <>
       {/* ScrollSmoother moves #smooth-content (lib/animations.ts). Fixed
-          elements like the menu must stay outside it. */}
+          elements like the navigation must stay outside it. */}
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main>
@@ -16,7 +16,7 @@ export default function page() {
           <Footer />
         </div>
       </div>
-      <Menu />
+      <SectionNav />
       <GsapAnimations />
     </>
   );

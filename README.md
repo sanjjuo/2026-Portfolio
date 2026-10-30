@@ -11,7 +11,7 @@ My personal portfolio: a single-page site with editorial typography, scroll-driv
 | Animation  | GSAP 3 (ScrollTrigger, SplitText, ScrollSmoother), plus CSS keyframes  |
 | 3D / WebGL | three.js with `@react-three/fiber` and `drei`, plus a raw WebGL2 dot grid |
 | Icons      | `lucide-react`, `react-icons`                                          |
-| Fonts      | Geist, Geist Mono, Fraunces and Bricolage Grotesque, via `next/font`   |
+| Fonts      | Geist, Geist Mono and Fraunces via `next/font/google`; Bricolage Grotesque self-hosted as a 4 KB subset |
 
 ## Getting started
 
@@ -47,13 +47,13 @@ Classes follow Tailwind v4's canonical forms, the ones IntelliSense suggests. Th
 ```
 app/                         Routes, layout and global styles
 components/
-  common/                    Shared building blocks (Menu, Preloader, SectionHeading, ...)
+  common/                    Shared building blocks (SectionNav, Preloader, SectionHeading, ...)
   effects/                   Standalone visual effects (DotGrid, LogoLoop, ModelViewer, ...)
   home/                      One folder per section of the home page
     Hero/
       Hero.tsx               Section shell: glow, grid, stepped edge
       components/            Parts used only by this section
-    About/  Experience/  Works/  Skills/  Marquee/  Footer/
+    About/  Experience/  Works/  Testimonials/  Skills/  Marquee/  Footer/
     Home.tsx                 Puts the sections in order
     index.ts                 Re-exports every section
 lib/                         Animation engine, GSAP setup, site details
@@ -67,9 +67,10 @@ public/
 
 | File          | What it does |
 | ------------- | ------------ |
-| `layout.tsx`  | Root HTML shell. Loads the fonts through `next/font` and sets the SEO, Open Graph and Twitter metadata. Also draws the two thin vertical guide lines that frame the whole page. |
+| `layout.tsx`  | Root HTML shell. Loads the fonts through `next/font` (only Geist and the hero name font are preloaded) and sets the SEO, Open Graph and Twitter metadata. Also draws the two thin vertical guide lines that frame the whole page. |
 | `template.tsx`| Wraps every page and remounts on navigation, so the **preloader** plays on first load. |
-| `page.tsx`    | The home page. Puts the content inside `#smooth-wrapper > #smooth-content`, the structure that GSAP ScrollSmoother needs. The menu and the animation starter sit outside it, so they stay fixed. |
+| `page.tsx`    | The home page. Puts the content inside `#smooth-wrapper > #smooth-content`, the structure that GSAP ScrollSmoother needs. The navigation and the animation starter sit outside it, so they stay fixed. |
+| `fonts/`      | `bricolage-grotesque-condensed-caps.woff2`: the hero name font, cut down to capitals A–Z with width fixed at condensed, keeping only the weight axis (4 KB instead of 130 KB). |
 | `theme.css`   | Design tokens in Tailwind v4 `@theme` format: colours, fonts and easing. Change a colour here and it updates everywhere (`bg-brand`, `text-ink`, ...). |
 | `globals.css` | Tailwind import, base styles, and the **CSS-only animations**: the hero intro, the preloader, and hover rules that switch off during scrolling. |
 
@@ -98,8 +99,8 @@ public/
 
 | Component           | What it does |
 | ------------------- | ------------ |
-| `Preloader`         | Full-screen intro: the name rises in letter by letter, a counter runs to 100, an orange bar fills, then the panel slides up. **Pure CSS**, so it shows from the first paint without waiting for JavaScript. Hidden when the visitor prefers reduced motion. |
-| `Menu`              | Floating yellow "Menu" pill at the bottom of the screen. Opens a full menu of section links and closes when one is picked. The links are plain `<a href="#...">` tags so ScrollSmoother can glide to them. |
+| `Preloader`         | Full-screen intro: the name rises in letter by letter in the same face as the hero name, a counter runs to 100, an orange bar fills, then the panel slides up. **Pure CSS**, so it shows from the first paint without waiting for JavaScript. Hidden when the visitor prefers reduced motion. |
+| `SectionNav`        | Site navigation. A small pill at the bottom of the screen shows the current section ("04 Works") inside a ring that fills as you scroll. Clicking it opens a compact card of numbered section links just above it, with the current one in orange, plus social links and the CV. The page stays visible. Escape or a click elsewhere closes it. The links are plain `#section` anchors, so ScrollSmoother glides to them. |
 | `GsapAnimations`    | Calls `initAnimations()` once, and renders the orange **scroll progress bar** at the top of the screen. |
 | `SectionHeading`    | Shared section header: a numbered label such as `(03) Selected work` over a line that draws in, a large title that reveals line by line, and an optional intro. `Accent` renders the italic serif word inside titles. |
 | `DotGridBackground` | Wraps the WebGL `DotGrid` and loads it only when it nears the screen. |
@@ -142,16 +143,20 @@ public/
   - **Scroll reveal:** the panel opens from a cropped, rounded frame, then each screenshot rises in. There's no scaling, so the screenshots stay pixel-sharp.
   - A round orange **"View site" badge follows the cursor** with easing, using GPU transforms only. It's hidden on touch devices.
 
-#### 5. `Skills/`
+#### 5. `Testimonials/`
+- **`testimonialsData.ts`** holds the quotes, grouped into clients and colleagues. Each has `approved`: only approved quotes appear on the live site, while `npm run dev` also shows drafts with a "Draft, awaiting approval" label. With none approved, the section and its menu link are hidden and Skills becomes (04). Add `photo` to show a picture instead of initials.
+- **`components/TestimonialSlider.tsx`**: one quote at a time, so the section stays one screen tall however many quotes there are. Tabs switch between clients and colleagues, the arrows step through the quotes, and each quote decrypts into place character by character (`DecryptedText`).
+
+#### 6. `Skills/`
 - **`skillsData.ts`** holds the skill groups, each skill with an icon and a brand colour.
 - **`SkillsLoop.tsx`**: two endless rows of logos (`LogoLoop`) running in opposite directions. Hovering stops the row, and the logo under the cursor grows and lights up in its brand colour. It's loaded lazily (`LazySkillsLoop.tsx`).
-- Below them, the grouped skill pills appear one after another (`data-anim="stagger"`).
+- Below them, the grouped skill pills appear one after another (`data-anim="stagger"`). The pills are text only, since the logos already run in the loop and inline icons would bloat the HTML.
 
-#### 6. `Marquee/`
+#### 7. `Marquee/`
 - A tilted orange band of scrolling text: "Open to new opportunities ✱ Frontend Developer ✱ ...".
 - It loops endlessly, **speeds up while you scroll**, and runs backwards when you scroll up (`data-anim="marquee"`).
 
-#### 7. `Footer/`
+#### 8. `Footer/`
 - **`Footer.tsx`**: a giant "Let's work *together.*" headline that reveals line by line, plus a round **magnetic "Get in touch" button**. A yellow fill rises inside it on hover, and it opens an email.
 - **`components/BottomFooter.tsx`**: availability, email, social links (LinkedIn, GitHub, Instagram and WhatsApp, each in a new tab) and a back-to-top link.
 
@@ -162,6 +167,7 @@ public/
 | `DotGrid`           | WebGL2 field of dots drawn on the GPU. Dots near the cursor swell and stretch with its speed, a click sends out a shockwave, and an optional intro ripples them in. Accepts theme colours such as `var(--color-sun)`. |
 | `VariableProximity` | Splits text into letters and changes each letter's variable-font axes (weight, width) based on cursor distance. Used for the hero name. |
 | `ScrollReveal`      | Reveals text word by word, tied to the scroll position. |
+| `DecryptedText`     | React Bits text effect: characters scramble, then resolve into the real text. Adapted to use a plain `<span>` instead of the motion library. |
 | `LogoLoop`          | Smooth, endlessly looping row of logos with pause and hover states. |
 | `ModelViewer`       | three.js / react-three-fiber viewer for `.glb` models: studio lighting, auto-rotate, drag-to-rotate, hover tilt, floating motion and a soft shadow. |
 
@@ -206,6 +212,9 @@ Components only describe **what** should animate, using data attributes. `lib/an
 
 - **The hero and preloader are pure CSS**, so the first screen paints without waiting for JavaScript. The hero image loads eagerly with `fetchPriority="high"`.
 - **Heavy code is lazy-loaded:** WebGL dot grids, three.js models and the logo loop are downloaded only when they come near the viewport (`LazyMount`, `next/dynamic` with `ssr: false`). ScrollSmoother is loaded only on mouse and trackpad devices.
+- **GSAP loads after the page is interactive:** `GsapAnimations` and `ScrollReveal` import it on demand, so it isn't in the startup bundle.
+- **Small fonts, preloaded only when needed:** the hero name font is a 4 KB subset, and the mono and serif fonts aren't preloaded, so they don't compete with the hero image.
+- **No hidden downloads:** the CV is a plain `<a>` link, because `next/link` would prefetch the PDF on page load.
 - **GPU-only motion:** cursor-follow and parallax effects use transforms, never layout properties.
 - **Responsive, optimised images:** `next/image` serves sized images in modern formats with blur placeholders. Screenshots use quality 90 to keep text crisp.
 - **Hover effects are disabled while scrolling**, so the project panels don't repaint mid-scroll.
@@ -224,6 +233,7 @@ Components only describe **what** should animate, using data attributes. `lib/an
 | Name, role, email, CV file | `lib/site.ts` |
 | Projects                   | `components/home/Works/projectsData.ts`, with screenshots in `public/images/projects/` |
 | Jobs and education         | `components/home/Experience/experienceData.ts` |
+| Testimonials               | `components/home/Testimonials/testimonialsData.ts` |
 | Skills                     | `components/home/Skills/skillsData.ts` |
 | Colours and fonts          | `app/theme.css` (colours), `app/layout.tsx` (fonts) |
 | Animation timing and feel  | `lib/animations.ts` |

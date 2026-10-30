@@ -3,6 +3,7 @@ import SectionHeading, {
 } from "@/components/common/SectionHeading/SectionHeading";
 import LazySkillsLoop from "./components/LazySkillsLoop";
 import { skillGroups } from "./skillsData";
+import { visibleTestimonials } from "../Testimonials/testimonialsData";
 
 export default function Skills() {
   return (
@@ -15,7 +16,8 @@ export default function Skills() {
         <div className="container">
           <SectionHeading
             id="skills-title"
-            index="04"
+            // Follows Testimonials, which is hidden until a quote is approved.
+            index={visibleTestimonials.length ? "05" : "04"}
             label="Skills & tools"
             dark
             title={
@@ -44,13 +46,14 @@ export default function Skills() {
               <h3 className="text-sm font-medium uppercase tracking-[0.2em] text-paper/60">
                 {title}
               </h3>
+              {/* Text only: the logos already run in the loop above, and
+                  dozens of inline icons here would bloat the page HTML. */}
               <ul className="flex flex-wrap gap-2">
-                {skills.map(({ name, icon: Icon }) => (
+                {skills.map(({ name }) => (
                   <li
                     key={name}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-paper/15 px-3 py-1 text-xs font-medium uppercase tracking-wider text-paper/85 transition-colors duration-300 hover:border-brand hover:text-brand md:text-sm"
+                    className="inline-flex items-center rounded-full border border-paper/15 px-3 py-1 text-xs font-medium uppercase tracking-wider text-paper/85 transition-colors duration-300 hover:border-brand hover:text-brand md:text-sm"
                   >
-                    <Icon aria-hidden="true" className="size-3.5 md:size-4" />
                     {name}
                   </li>
                 ))}
