@@ -19,9 +19,8 @@ export const testimonialGroups: { id: TestimonialGroup; label: string }[] = [
   { id: "colleagues", label: "Colleagues" },
 ];
 
-// DRAFT QUOTES: each one was written as a starting point, not said by the
-// person. Send each person their draft, ask them to edit it freely, paste in
-// their final wording, then set approved: true.
+// All approved by the people quoted. When adding someone new, keep
+// approved: false until they have agreed to their wording.
 export const testimonials: Testimonial[] = [
   {
     group: "clients",
@@ -29,7 +28,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed built the Urbaan storefront for us from start to finish. He turned our ideas into a fast, polished e-commerce site, kept us updated at every step and delivered on time.",
     name: "Ziyad Kunheen",
     role: "CEO, Codeedex Technologies",
-    approved: false,
+    approved: true,
   },
   {
     group: "colleagues",
@@ -37,7 +36,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed writes clean, reliable React and picks up new parts of the codebase quickly. He cares about the details of the UI and is always ready to help the team ship.",
     name: "Abdallah Abusidu",
     role: "Senior Frontend Developer, EUNX",
-    approved: false,
+    approved: true,
   },
   {
     group: "colleagues",
@@ -45,7 +44,7 @@ export const testimonials: Testimonial[] = [
       "Working with Sanjeed on the EUNX platform is easy. He takes ownership of features, asks the right questions and turns designs into accurate, responsive interfaces.",
     name: "Abdallah Mahmoud",
     role: "Senior Frontend Developer, EUNX",
-    approved: false,
+    approved: true,
   },
   {
     group: "colleagues",
@@ -53,7 +52,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed understands the API side of every feature. He integrates endpoints carefully, flags issues early and communicates clearly, which makes backend work much smoother.",
     name: "Talal Qasim",
     role: "Backend Developer, EUNX",
-    approved: false,
+    approved: true,
   },
   {
     group: "colleagues",
@@ -61,7 +60,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed is a great teammate to build with. He keeps the web experience consistent with our mobile app and finds solutions quickly when requirements change.",
     name: "Omar Ghoneim",
     role: "App Developer, EUNX",
-    approved: false,
+    approved: true,
   },
 ];
 
