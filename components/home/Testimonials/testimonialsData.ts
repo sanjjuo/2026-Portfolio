@@ -8,6 +8,8 @@ export type Testimonial = {
   // Optional photo in /public, e.g. "/images/testimonials/jane.jpg".
   // Without one, the person's initials are shown.
   photo?: string;
+  // Their LinkedIn profile. The name links to it.
+  linkedin?: string;
   // Set to true only once this person has read and agreed to the quote
   // (or sent you their own wording). Unapproved quotes never appear on the
   // live site.
@@ -28,6 +30,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed built the Urbaan storefront for us from start to finish. He turned our ideas into a fast, polished e-commerce site, kept us updated at every step and delivered on time.",
     name: "Ziyad Kunheen",
     role: "CEO, Codeedex Technologies",
+    linkedin: "https://www.linkedin.com/in/ziyad-kunheen-p-0b92012b0/",
     approved: true,
   },
   {
@@ -36,6 +39,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed writes clean, reliable React and picks up new parts of the codebase quickly. He cares about the details of the UI and is always ready to help the team ship.",
     name: "Abdallah Abusidu",
     role: "Senior Frontend Developer, EUNX",
+    linkedin: "https://www.linkedin.com/in/abdallahabusidu/",
     approved: true,
   },
   {
@@ -44,6 +48,7 @@ export const testimonials: Testimonial[] = [
       "Working with Sanjeed on the EUNX platform is easy. He takes ownership of features, asks the right questions and turns designs into accurate, responsive interfaces.",
     name: "Abdallah Mahmoud",
     role: "Senior Frontend Developer, EUNX",
+    linkedin: "https://www.linkedin.com/in/abdalla-mahmoud-8581a7183/",
     approved: true,
   },
   {
@@ -52,6 +57,7 @@ export const testimonials: Testimonial[] = [
       "Sanjeed understands the API side of every feature. He integrates endpoints carefully, flags issues early and communicates clearly, which makes backend work much smoother.",
     name: "Talal Qasim",
     role: "Backend Developer, EUNX",
+    linkedin: "https://www.linkedin.com/in/talalqasim/",
     approved: true,
   },
   {
@@ -59,7 +65,8 @@ export const testimonials: Testimonial[] = [
     quote:
       "Sanjeed is a great teammate to build with. He keeps the web experience consistent with our mobile app and finds solutions quickly when requirements change.",
     name: "Omar Ghoneim",
-    role: "App Developer, EUNX",
+    role: "Mobile App Developer, EUNX",
+    linkedin: "https://www.linkedin.com/in/omar-ghoneim-1395361b7/",
     approved: true,
   },
 ];

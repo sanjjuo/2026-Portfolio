@@ -3,6 +3,7 @@
 import DecryptedText from "@/components/effects/DecryptedText";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { CiLinkedin } from "react-icons/ci";
 import { useState, type ReactNode } from "react";
 import {
   testimonialGroups,
@@ -148,8 +149,21 @@ export default function TestimonialSlider({ heading }: { heading: ReactNode }) {
                     </span>
                   )}
                   <span className="text-sm">
-                    <span className="block font-semibold">{t.name}</span>
-                    <span className="text-paper/60">{t.role}</span>
+                    {t.linkedin ? (
+                      <a
+                        href={t.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${t.name} on LinkedIn`}
+                        className="inline-flex items-center gap-1.5 font-semibold transition-colors duration-300 hover:text-brand"
+                      >
+                        {t.name}
+                        <CiLinkedin aria-hidden="true" className="size-4.5" />
+                      </a>
+                    ) : (
+                      <span className="block font-semibold">{t.name}</span>
+                    )}
+                    <span className="block text-paper/60">{t.role}</span>
                   </span>
                   {!t.approved && (
                     // Only ever seen locally: drafts are hidden on the live site.
